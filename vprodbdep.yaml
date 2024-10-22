@@ -17,8 +17,6 @@ spec:
       containers:
         - name: vprodb
           image: base002/vprofiledb:V1
- #         args:
-#          - "--ignore-db-dir=lost+found"
           volumeMounts:
             - mountPath: /var/lib/mysql
               name: vpro-db-data
@@ -33,12 +31,15 @@ spec:
                   key: db-pass
       nodeSelector:
         zone: us-east-1a
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
       volumes:
         - name: vpro-db-data
           awsElasticBlockStore:
             volumeID: vol-0e070afe0b4bf83c2
             fsType: ext4
-
       initContainers:
         - name: busybox
           image: busybox:latest
