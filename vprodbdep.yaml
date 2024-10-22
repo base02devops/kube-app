@@ -31,10 +31,6 @@ spec:
                   key: db-pass
       nodeSelector:
         zone: us-east-1a
-      tolerations:
-        - key: "node-role.kubernetes.io/control-plane"
-          operator: "Exists"
-          effect: "NoSchedule"
       volumes:
         - name: vpro-db-data
           awsElasticBlockStore:
@@ -43,7 +39,7 @@ spec:
       initContainers:
         - name: busybox
           image: busybox:latest
-          args: ["rm", "-rf", "/var/lib/mysql/lost+found"]
+          args: [ "rm", "-rf", "/var/lib/mysql/lost+found" ]
           volumeMounts:
             - name: vpro-db-data
               mountPath: /var/lib/mysql
